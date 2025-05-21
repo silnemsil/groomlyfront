@@ -1,8 +1,9 @@
 <template>
   <nav>
-    <h1>Groomly is the best solution for...</h1>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <h1>Leia oma lemmikule parim salong</h1>
+    <router-link to="/">Meie Lugu</router-link> |
+    <router-link to="/about">Salongid</router-link> |
+    <router-link to="/about">Logi Sisse</router-link>
   </nav>
   <router-view/>
 </template>
@@ -17,7 +18,7 @@
 }
 
 nav {
-  padding: 30px;
+  padding: 70px;
 }
 
 nav a {
