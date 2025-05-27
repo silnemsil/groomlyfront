@@ -1,38 +1,43 @@
 <template>
-  <div class="container">
+  <div class="container mt-3">
+    <div class="mb-3 col-2">
+      <CitiesDropdown
+          :cities="cities"
+          :selected-city-id="selectedCityId"
+          defaultOptionLabel="Kõik linnad"
+          @event-new-city-selected="handleCitySelection"
+      />
+    </div>
 
-    <h2>Minu profiil</h2>
+    <div v-if="loading" class="text-center">Laen groomereid...</div>
 
-    <form @submit.prevent="saveGroomerData">
-      <div class="mb-3">
-        <label for="city" class="form-label">Linn</label>
-        <CitiesDropdown :cities="cities"
-                        :selected-city-id="groomer.cityId"
-                        @event-new-city-selected="setCityId"/>
+    <div v-else>
+      <div v-if="filteredGroomers.length === 0">
+        <p>Antud linnas groomereid ei leitud.</p>
       </div>
 
-      <div class="mb-3">
-        <label class="form-label">Tänava nimi</label>
-        <input v-model="groomer.streetName" class="form-control" type="text">
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Maja nr</label>
-        <input v-model="groomer.houseNumber" class="form-control" type="text">
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Nimi</label>
-        <input v-model="groomer.groomerName" class="form-control" type="text">
-      </div>
-
-      <!-- lisa teised väljad samamoodi -->
-
-      <button type="submit" class="btn btn-primary">Salvesta</button>
-    </form>
-
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Teenusepakkuja</th>
+          <th>Kirjeldus</th>
+          <th>Teenused</th>
+          <th>Kontakt</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="groomer in filteredGroomers" :key="groomer.id">
+          <td>{{ groomer.groomerName }}</td>
+          <td>{{ groomer.groomerDescription }}</td>
+          <td>{{ groomer.services?.join(', ') || 'Puudub info' }}</td>
+          <td>{{ groomer.groomerTelNumber }}, {{ groomer.groomerEmail }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
+
 
 <script>
 import CitiesDropdown from '@/components/city/CitiesDropdown.vue';
@@ -40,44 +45,59 @@ import CityService from '@/services/CityService';
 import GroomerService from '@/services/GroomerService';
 
 export default {
-  name: 'GroomerProfileForm',
-  components: { CitiesDropdown },
+  name: 'GroomersView',
+  components: {
+    CitiesDropdown,
+  },
   data() {
     return {
       cities: [],
-      groomer: {
-        cityId: 0,
-        streetName: '',
-        houseNumber: '',
-        groomerName: '',
-        groomerDescription: '',
-        groomerTelNumber: '',
-        groomerEmail: ''
-      }
+      groomers: [],
+      selectedCityId: 0,
+      loading: false,
     };
   },
-  methods: {
-    setCityId(cityId) {
-      this.groomer.cityId = cityId;
+  computed: {
+    filteredGroomers() {
+      if (this.selectedCityId === 0) {
+        return this.groomers;
+      }
+      return this.groomers.filter(groomer => groomer.cityId === this.selectedCityId);
     },
-    getAllCities() {
+  },
+  methods: {
+    handleCitySelection(cityId) {
+      this.selectedCityId = cityId;
+    },
+    fetchCities() {
       CityService.sendGetCitiesRequest()
           .then(response => {
             this.cities = response.data;
           })
           .catch(() => {
-            // lisa vajadusel error handling
+            alert('Linnade laadimisel tekkis viga');
           });
     },
-    saveGroomerData() {
-      GroomerService.sendPostGroomerRequest(this.groomer)
-          .then(() => {
-            alert("Andmed salvestatud!");
+    fetchGroomers() {
+      this.loading = true;
+      GroomerService.getAllGroomers()
+          .then(response => {
+            this.groomers = response.data;
+            console.log("Laetud groomerid:", this.groomers); // <- siit näed cityId tüüpi
+          })
+          .catch(() => {
+            alert('Groomerite laadimisel tekkis viga');
+          })
+          .finally(() => {
+            this.loading = false;
           });
     }
+,
   },
-  mounted() {
-    this.getAllCities();
-  }
-}
+  created() {
+    this.fetchCities();
+    this.fetchGroomers();
+  },
+};
 </script>
+

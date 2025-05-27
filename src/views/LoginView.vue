@@ -93,11 +93,16 @@ export default {
       this.$emit('event-update-nav-menu')
 
       if (this.loginResponse.roleName === 'customer') {
+        //TODO: veel teha
         Navigation.navigateToGroomersView()
+
       } else if (this.loginResponse.roleName === 'groomer') {
         //Todo veel teha
+        //Navigation
       } else {
         //Todo veel teha (admin)
+        //Navigation
+
 
       }
 
