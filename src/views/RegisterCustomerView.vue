@@ -17,6 +17,7 @@
       <button @click="register" type="button" class="btn btn-primary">
         Registreeri
       </button>
+
     </div>
   </div>
 </template>

@@ -9,4 +9,8 @@ export default {
     navigateToLoginView() {
         router.push({name: 'loginRoute'})
     },
+
+    navigateToGroomersView() {
+        router.push({name: 'groomersRoute'})
+    },
 }

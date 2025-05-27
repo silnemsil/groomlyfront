@@ -4,6 +4,7 @@ import LoginView from "@/views/LoginView.vue";
 import RegisterCustomerView from '@/views/RegisterCustomerView.vue'
 import RegisterGroomerView from '@/views/RegisterGroomerView.vue'
 import ErrorView from "@/views/ErrorView.vue";
+import GroomersView from "@/views/GroomersView.vue";
 
 const routes = [
   {
@@ -20,6 +21,11 @@ const routes = [
     path: '/login',
     name: 'loginRoute',
     component: LoginView
+  },
+  {
+    path: '/groomers',
+    name: 'groomersRoute',
+    component: GroomersView
   },
   {
     path: '/register-customer',

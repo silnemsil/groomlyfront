@@ -5,10 +5,7 @@ export default {
         return axios.post('/registration-customer', newCustomer)
     },
 
-    registerGroomer(username, password) {
-        return axios.post('/registration-groomer', {
-            username: username,
-            password: password,
-        })
+    registerGroomer(newGroomer) {
+        return axios.post('/registration-groomer', newGroomer)
     }
 }

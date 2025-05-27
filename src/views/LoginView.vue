@@ -91,7 +91,16 @@ export default {
       sessionStorage.setItem('userId', this.loginResponse.userId)
       sessionStorage.setItem('roleName', this.loginResponse.roleName)
       this.$emit('event-update-nav-menu')
-      Navigation.navigateToAtmsView()
+
+      if (this.loginResponse.roleName === 'customer') {
+        Navigation.navigateToGroomersView()
+      } else if (this.loginResponse.roleName === 'groomer') {
+        //Todo veel teha
+      } else {
+        //Todo veel teha (admin)
+
+      }
+
     },
 
     handleLoginErrorResponse(error) {

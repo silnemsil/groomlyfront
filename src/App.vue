@@ -1,7 +1,7 @@
 <template>
   <nav>
     <h1>Groomly - kui hoolid oma lemmikust</h1>
-    <router-link to="/">Home</router-link> |
+    <router-link to="/">Kodu</router-link> |
     <router-link to="/about">About</router-link> |
     <router-link to="/login">Logi sisse</router-link> |
   </nav>
