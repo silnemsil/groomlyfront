@@ -1,19 +1,14 @@
 import axios from 'axios'
 
 export default {
-    registrationCustomer(username, password) {
-        return axios.post('/register-customer', {
-            username: username,
-            password: password,
-            roleId: 3
-        })
+    registerCustomer(newCustomer) {
+        return axios.post('/registration-customer', newCustomer)
     },
 
-    registrationGroomer(username, password) {
-        return axios.post('/register-groomer', {
+    registerGroomer(username, password) {
+        return axios.post('/registration-groomer', {
             username: username,
             password: password,
-            roleId: 2
         })
     }
 }

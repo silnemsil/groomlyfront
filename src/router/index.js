@@ -3,31 +3,37 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from "@/views/LoginView.vue";
 import RegisterCustomerView from '@/views/RegisterCustomerView.vue'
 import RegisterGroomerView from '@/views/RegisterGroomerView.vue'
+import ErrorView from "@/views/ErrorView.vue";
 
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'homeRoute',
     component: HomeView
   },
   {
+    path: '/error',
+    name: 'errorRoute',
+    component: ErrorView
+  },
+  {
     path: '/login',
-    name: 'login',
+    name: 'loginRoute',
     component: LoginView
   },
   {
     path: '/register-customer',
-    name: 'registerCustomer',
+    name: 'registerCustomerRoute',
     component: RegisterCustomerView
   },
   {
     path: '/register-groomer',
-    name: 'registerGroomer',
+    name: 'registerGroomerRoute',
     component: RegisterGroomerView
   },
   {
     path: '/about',
-    name: 'about',
+    name: 'aboutRoute',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
