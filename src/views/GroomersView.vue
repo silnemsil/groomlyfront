@@ -16,21 +16,30 @@
         <p>Antud linnas groomereid ei leitud.</p>
       </div>
 
-      <table class="table table-striped">
+      <table class="table table-striped table-success">
         <thead>
         <tr>
           <th>Teenusepakkuja</th>
           <th>Kirjeldus</th>
           <th>Teenused</th>
-          <th>Kontakt</th>
+          <th>Kontakttelefon</th>
+          <th>Email</th>
         </tr>
         </thead>
         <tbody>
+<!-- Järgnev koodilõik on GPT lahendatud ent küsisin selgitusi -->
+        <!-- Luuakse üks rida iga groomeri kohta -->
         <tr v-for="groomer in filteredGroomers" :key="groomer.id">
+          <!-- Teenuspakkuja nimi -->
           <td>{{ groomer.groomerName }}</td>
-          <td>{{ groomer.groomerDescription }}</td>
+          <!-- Kirjeldus -->
+          <td>{{ groomer.groomerDescription }}</td><!-- -->
+<!-- join on javascripti meetod, kus massiiv ühendatakse üheks stringiks -->
+<!-- services? on valikuline chaining, ehk kontrollime, kas services eksiseeterib, kui ei või tühi, siis kuvatakse "puudub indo" -->
           <td>{{ groomer.services?.join(', ') || 'Puudub info' }}</td>
-          <td>{{ groomer.groomerTelNumber }}, {{ groomer.groomerEmail }}</td>
+          <!-- Kontakt -->
+          <td>{{ groomer.groomerTelNumber }}</td>
+          <td> {{ groomer.groomerEmail }}</td>
         </tr>
         </tbody>
       </table>
@@ -57,6 +66,8 @@ export default {
       loading: false,
     };
   },
+  //computed ehk arvutatud omadus on meetod, kui data plokis miski muutub, siis arvutatakse cumputed uuesti
+  // computed eelised meetodite ees, arvutatakse vaid vajadusel, on automaatne vahemälu, hea andmete tuletamiseks
   computed: {
     filteredGroomers() {
       if (this.selectedCityId === 0) {
@@ -83,7 +94,6 @@ export default {
       GroomerService.getAllGroomers()
           .then(response => {
             this.groomers = response.data;
-            console.log("Laetud groomerid:", this.groomers); // <- siit näed cityId tüüpi
           })
           .catch(() => {
             alert('Groomerite laadimisel tekkis viga');
