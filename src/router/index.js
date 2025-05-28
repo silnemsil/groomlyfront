@@ -5,7 +5,6 @@ import RegisterCustomerView from '@/views/RegisterCustomerView.vue'
 import RegisterGroomerView from '@/views/RegisterGroomerView.vue'
 import ErrorView from "@/views/ErrorView.vue";
 import GroomersView from "@/views/GroomersView.vue";
-import * as path from "node:path";
 import GroomerDetailView from "@/views/GroomerDetailView.vue";
 
 const routes = [

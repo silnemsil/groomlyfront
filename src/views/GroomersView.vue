@@ -9,11 +9,11 @@
       />
     </div>
 
-    <div v-if="loading" class="text-center">Laen groomereid...</div>
+    <div v-if="loading" class="text-center">Laen lemmiklooma iluteenindajaid...</div>
 
     <div v-else>
       <div v-if="filteredGroomers.length === 0">
-        <p>Antud linnas groomereid ei leitud.</p>
+        <p>Valitud linnas lemmiklooma iluteenindajaid ei leitud.</p>
       </div>
 
       <table class="table table-striped table-success">
