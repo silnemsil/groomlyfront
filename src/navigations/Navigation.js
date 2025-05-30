@@ -13,4 +13,13 @@ export default {
     navigateToGroomersView() {
         router.push({name: 'groomersRoute'})
     },
+
+    navigateToGroomerView(groomerId) {
+        router.push({
+            name: 'groomerRoute',
+            query: {
+                groomerId: groomerId
+            }
+        })
+    },
 }

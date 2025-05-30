@@ -5,18 +5,18 @@
           :cities="cities"
           :selected-city-id="selectedCityId"
           defaultOptionLabel="Kõik linnad"
-          @event-new-city-selected="handleCitySelection"
+          @event-new-city-selected="handleNewCitySelection"
       />
     </div>
-
+    <AlertDanger :error-message="alertMessage"/>
     <div v-if="loading" class="text-center">Laen lemmiklooma iluteenindajaid...</div>
 
     <div v-else>
-      <div v-if="filteredGroomers.length === 0">
+      <div v-if="groomers.length === 0">
         <p>Valitud linnas lemmiklooma iluteenindajaid ei leitud.</p>
       </div>
 
-      <table class="table table-striped table-success">
+      <table v-if="groomers.length > 0" class="table table-striped table-success">
         <thead>
         <tr>
           <th>Teenusepakkuja</th>
@@ -28,9 +28,14 @@
         </thead>
         <tbody>
         <tr v-for="groomer in groomers" :key="groomer.groomerId">
-          <td>{{ groomer.groomerName }}</td>
+          <td>
+            {{groomer.groomerId}}
+            <a href="#" @click="navigateToGroomerView(groomer.groomerId)">{{ groomer.groomerName }}</a>
+          </td>
           <td>{{ groomer.groomerDescription }}</td><!-- -->
-          <td>{{ groomer.services?.join(', ') || 'Puudub info' }}</td>
+          <td>
+            <p v-for="procedure in groomer.procedures" :key="procedure.procedureId">{{procedure.procedureName}}</p>
+          </td>
           <td>{{ groomer.groomerTelNumber }}</td>
           <td> {{ groomer.groomerEmail }}</td>
         </tr>
@@ -45,14 +50,20 @@
 import CitiesDropdown from '@/components/city/CitiesDropdown.vue';
 import CityService from '@/services/CityService';
 import GroomerService from '@/services/GroomerService';
+import AlertDanger from "@/components/alert/AlertDanger.vue";
+import Navigation from "@/navigations/Navigation";
 
 export default {
   name: 'GroomersView',
   components: {
+    AlertDanger,
     CitiesDropdown,
   },
   data() {
     return {
+      alertMessage: '',
+      selectedCityId: 0,
+      loading: false,
 
       cities: [
         {
@@ -70,17 +81,28 @@ export default {
           groomerTelNumber: '',
           groomerEmail: '',
           streetName: '',
-          houseNumber: ''
+          houseNumber: '',
+          procedures: [
+            {
+              procedureId: 0,
+              procedureName: '',
+              procedurePrice: 0
+            }
+          ]
         }
       ],
 
-      selectedCityId: 0,
-      loading: false,
+      errorResponse: {
+        message: '',
+        errorCode: 0
+      }
+
     };
   },
   methods: {
-    handleCitySelection(cityId) {
+    handleNewCitySelection(cityId) {
       this.selectedCityId = cityId;
+      this.getGroomers()
     },
     getCities() {
       CityService.sendGetCitiesRequest()
@@ -91,23 +113,42 @@ export default {
             alert('Linnade laadimisel tekkis viga');
           });
     },
+
     getGroomers() {
       this.loading = true;
 
-      GroomerService.getAllGroomers()
+      GroomerService.sendGetCityGroomers(this.selectedCityId)
           .then(response => {
             this.groomers = response.data;
           })
-          .catch(() => {
-            alert('Groomerite laadimisel tekkis viga');
+          .catch(error => {
+            this.errorResponse = error.response.data
+
+            if (this.errorResponse.errorCode === 203) {
+              this.alertMessage = this.errorResponse.message
+              this.groomers = []
+            } else {
+              Navigation.navigateToErrorView()
+            }
+
           })
           .finally(() => {
             this.loading = false;
           });
-    }
-,
+    },
+
+    navigateToGroomerView(groomerId) {
+      Navigation.navigateToGroomerView(groomerId)
+    },
+
+
+
+    resetAlertMessage() {
+      this.alertMessage = ''
+    },
+
   },
-  created() {
+  beforeMount() {
     this.getCities();
     this.getGroomers();
   },
