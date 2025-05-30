@@ -79,6 +79,7 @@ export default {
   methods: {
     handleCitySelection(cityId) {
       this.selectedCityId = cityId;
+      this.fetchGroomers(cityId); // lisasin täna
     },
     fetchCities() {
       CityService.sendGetCitiesRequest()
@@ -89,9 +90,24 @@ export default {
             alert('Linnade laadimisel tekkis viga');
           });
     },
-    fetchGroomers() {
+
+    // fetchGroomers() {
+    //   this.loading = true;
+    //   GroomerService.getAllGroomers()
+    //       .then(response => {
+    //         this.groomers = response.data;
+    //       })
+    //       .catch(() => {
+    //         alert('Groomerite laadimisel tekkis viga');
+    //       })
+    //       .finally(() => {
+    //         this.loading = false;
+    //       });
+    // }
+
+    fetchGroomers(cityId = 0) {
       this.loading = true;
-      GroomerService.getAllGroomers()
+      GroomerService.findGroomerByCity(cityId)
           .then(response => {
             this.groomers = response.data;
           })

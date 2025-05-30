@@ -1,0 +1,50 @@
+
+
+/*esimesed nuppud */
+.router-link-exact-active,
+.active {
+    background-color: #007bff;
+    color: white;
+}
+
+
+.banner-slide {
+    height: 45vh;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    color: white;
+}
+
+.banner-content {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+}
+
+.banner-content.right {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    transform: none;
+}
+
+
+
+.banner-content h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.banner-content p {
+    font-size: 1.2rem;
+}
