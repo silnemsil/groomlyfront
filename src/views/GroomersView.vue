@@ -27,17 +27,10 @@
         </tr>
         </thead>
         <tbody>
-<!-- Järgnev koodilõik on GPT lahendatud ent küsisin selgitusi -->
-        <!-- Luuakse üks rida iga groomeri kohta -->
-        <tr v-for="groomer in filteredGroomers" :key="groomer.id">
-          <!-- Teenuspakkuja nimi -->
+        <tr v-for="groomer in groomers" :key="groomer.groomerId">
           <td>{{ groomer.groomerName }}</td>
-          <!-- Kirjeldus -->
           <td>{{ groomer.groomerDescription }}</td><!-- -->
-<!-- join on javascripti meetod, kus massiiv ühendatakse üheks stringiks -->
-<!-- services? on valikuline chaining, ehk kontrollime, kas services eksiseeterib, kui ei või tühi, siis kuvatakse "puudub indo" -->
           <td>{{ groomer.services?.join(', ') || 'Puudub info' }}</td>
-          <!-- Kontakt -->
           <td>{{ groomer.groomerTelNumber }}</td>
           <td> {{ groomer.groomerEmail }}</td>
         </tr>
@@ -60,27 +53,36 @@ export default {
   },
   data() {
     return {
-      cities: [],
-      groomers: [],
+
+      cities: [
+        {
+          cityId: 0,
+          cityName: ''
+        }
+      ],
+
+      groomers: [
+        {
+          groomerId: 0,
+          cityId: 0,
+          groomerName: '',
+          groomerDescription: '',
+          groomerTelNumber: '',
+          groomerEmail: '',
+          streetName: '',
+          houseNumber: ''
+        }
+      ],
+
       selectedCityId: 0,
       loading: false,
     };
-  },
-  //computed ehk arvutatud omadus on meetod, kui data plokis miski muutub, siis arvutatakse cumputed uuesti
-  // computed eelised meetodite ees, arvutatakse vaid vajadusel, on automaatne vahemälu, hea andmete tuletamiseks
-  computed: {
-    filteredGroomers() {
-      if (this.selectedCityId === 0) {
-        return this.groomers;
-      }
-      return this.groomers.filter(groomer => groomer.cityId === this.selectedCityId);
-    },
   },
   methods: {
     handleCitySelection(cityId) {
       this.selectedCityId = cityId;
     },
-    fetchCities() {
+    getCities() {
       CityService.sendGetCitiesRequest()
           .then(response => {
             this.cities = response.data;
@@ -89,8 +91,9 @@ export default {
             alert('Linnade laadimisel tekkis viga');
           });
     },
-    fetchGroomers() {
+    getGroomers() {
       this.loading = true;
+
       GroomerService.getAllGroomers()
           .then(response => {
             this.groomers = response.data;
@@ -105,8 +108,8 @@ export default {
 ,
   },
   created() {
-    this.fetchCities();
-    this.fetchGroomers();
+    this.getCities();
+    this.getGroomers();
   },
 };
 </script>
