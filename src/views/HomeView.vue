@@ -20,7 +20,7 @@
 
       <div class="carousel-item banner-slide" style="background-image: url('/images/banner7.jpg')">
         <div class="banner-content">
-          <h2>Tule uuele välimusele!</h2>
+          <h2>Oma lemmikule uus välimus!</h2>
           <p>Eripakkumised igal nädalal</p>
 
         </div>
