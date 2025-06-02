@@ -14,8 +14,9 @@
         <div @click="logOut" class="btn btn-outline-primary">
           Logi välja
         </div>
+<!--         class="cursor-pointer -->
         <template v-if="basketShortInfo.isBookingStarted">
-          <font-awesome-icon @click="navigateToCheckoutView" icon="basket-shopping" class="cursor-pointer"/>
+          <font-awesome-icon @click="navigateToCheckoutView" icon="basket-shopping" style="font-size: 36px;" class="cursor-pointer" />
           <span>{{basketShortInfo.numberOfItems}}</span>
         </template>
       </template>

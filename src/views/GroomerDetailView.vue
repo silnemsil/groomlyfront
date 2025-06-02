@@ -56,7 +56,7 @@
         </div>
         <div class="row justify-content-center">
           <div class="col col-2">
-            <button @click="navigateToCheckoutView" class="btn btn-success">Vaata ostuskorcik</button>
+            <button @click="navigateToCheckoutView" class="btn btn-success">Vaata ostukorvi</button>
           </div>
         </div>
       </div>
