@@ -1,10 +1,26 @@
 <template>
-  <div v-if="groomer">
+  <div v-if="groomer && groomer.groomerId">
     <h2>{{ groomer.groomerName }}</h2>
-    <p>{{ groomer.groomerDescription }}</p>
-    <p>Aadress: {{ groomer.streetName }} {{ groomer.houseNumber }}</p>
-    <p>Kontakttelefon: {{ groomer.groomerTelNumber }}</p>
-    <p>Email: {{ groomer.groomerEmail }}</p>
+    <table class="table table-bordered mt-3">
+      <tbody>
+      <tr>
+        <th>Kirjeldus</th>
+        <td>{{ groomer.groomerDescription }}</td>
+      </tr>
+      <tr>
+        <th>Aadress</th>
+        <td>{{ groomer.streetName }} {{ groomer.houseNumber }}</td>
+      </tr>
+      <tr>
+        <th>Kontakttelefon</th>
+        <td>{{ groomer.groomerTelNumber }}</td>
+      </tr>
+      <tr>
+        <th>Email</th>
+        <td>{{ groomer.groomerEmail }}</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
   <div v-else>
     <p>{{ error || 'Laen andmeid...' }}</p>
@@ -12,40 +28,37 @@
 </template>
 
 <script>
-import { useRoute } from "vue-router";
 import GroomerService from "@/services/GroomerService";
 
 export default {
   name: "GroomerDetailView",
-
   data() {
     return {
-      groomer: null,
       groomerId: null,
+      groomer: null,
       error: null
-    }
+    };
   },
-
   methods: {
     getGroomerDetails() {
+      console.log('Laen groomeri andmeid ID-ga:', this.groomerId);
       GroomerService.getGroomerDetails(this.groomerId)
           .then(response => {
-            this.groomer = response.data
+            console.log('Saadud groomer:', response.data);
+            this.groomer = response.data;
           })
           .catch(() => {
-            this.error = 'Ei leidnud lemmiklooma iluteenindaja andmeid'
-          })
+            this.error = 'Ei leidnud lemmiklooma iluteenindaja andmeid';
+          });
     }
   },
-
-  beforeMount() {
+  mounted() {
     this.groomerId = Number(this.$route.query.groomerId);
-
     if (this.groomerId) {
       this.getGroomerDetails();
     } else {
-      this.error = 'Vastava ID-ga groomer puudub';
+      this.error = 'Vigane või puuduv groomer ID';
     }
   }
-}
+};
 </script>
