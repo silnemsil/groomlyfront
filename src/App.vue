@@ -4,7 +4,7 @@
 
     <div class="btn-group" role="group" aria-label="Nav menu">
       <router-link to="/" class="btn btn-outline-primary">Kodu</router-link>
-      <router-link to="/about" class="btn btn-outline-secondary">About</router-link>
+      <router-link to="/support" class="btn btn-outline-secondary">Tugi</router-link>
       <router-link to="/login" class="btn btn-primary">Logi sisse</router-link>
     </div>
   </nav>
