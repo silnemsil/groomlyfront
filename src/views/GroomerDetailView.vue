@@ -31,6 +31,7 @@
 
         <div class="row justify-content-center">
           <div class="col col-6">
+            <AlertSuccess :success-message="successMessage"/>
             <table class="table">
               <thead>
               <tr>
@@ -44,13 +45,18 @@
                 <td>{{ procedure.procedureName }}</td>
                 <td>{{ procedure.procedurePrice }}</td>
                 <td>
-                  <font-awesome-icon @click="addBookingRequest(procedure.groomerProcedureId)"
+                  <font-awesome-icon @click="addBookingRequest(procedure)"
                                      icon="cart-plus" class="cursor-pointer"/>
                 </td>
               </tr>
 
               </tbody>
             </table>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col col-2">
+            <button @click="navigateToCheckoutView" class="btn btn-success">Vaata ostuskorcik</button>
           </div>
         </div>
       </div>
@@ -66,14 +72,18 @@
 import GroomerService from "@/services/GroomerService";
 import {useRoute} from "vue-router";
 import BookingService from "@/services/BookingService";
+import AlertSuccess from "@/components/alert/AlertSuccess.vue";
+import Navigation from "@/navigations/Navigation";
 
 export default {
   name: "GroomerDetailView",
+  components: {AlertSuccess},
   data() {
     return {
       userId: Number(sessionStorage.getItem('userId')),
       groomerId: 0,
       error: '',
+      successMessage: '',
 
       groomer: {
         groomerId: 0,
@@ -98,6 +108,10 @@ export default {
   },
   methods: {
 
+    navigateToCheckoutView() {
+      Navigation.navigateToCheckoutView()
+    },
+
     getGroomerDetails() {
       console.log('Laen groomeri andmeid ID-ga:', this.groomerId);
       GroomerService.getGroomerDetails(this.groomerId)
@@ -110,8 +124,21 @@ export default {
           });
     },
 
-    addBookingRequest(groomerProcedureId) {
-      BookingService.sendPostBookingGroomerProcedureRequest(this.userId, groomerProcedureId)
+    addBookingRequest(procedure) {
+      BookingService.sendPostBookingGroomerProcedureRequest(this.userId, procedure.groomerProcedureId)
+          .then(() => this.handleAddBookingRequestResponse(procedure))
+          .catch()
+
+    },
+
+    handleAddBookingRequestResponse(procedure) {
+      this.$emit('event-update-nav-menu')
+      this.successMessage = 'Teenus ' + procedure.procedureName + ' hinnaga ' + procedure.procedurePrice + ' on edukalt ostukorvi listatud!'
+      setTimeout(this.resetSuccessMessage, 3000)
+    },
+
+    resetSuccessMessage() {
+      this.successMessage = ''
     },
 
 

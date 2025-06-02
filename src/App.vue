@@ -10,6 +10,7 @@
         <router-link to="/login" class="btn btn-outline-primary">Logi sisse</router-link>
       </template>
       <template v-else>
+        <router-link to="/groomers" class="btn btn-outline-primary">Groomerid</router-link>
         <div @click="logOut" class="btn btn-outline-primary">
           Logi välja
         </div>
@@ -45,8 +46,6 @@ export default {
   },
   methods: {
 
-
-
     getBasketShortInfo() {
       BookingService.sendGetBookingShortBasketInfoRequest(this.userId)
           .then(response => this.handleGetBasketShortInfoResponse(response))
@@ -55,6 +54,7 @@ export default {
 
     handleGetBasketShortInfoResponse(response) {
       this.basketShortInfo = response.data
+      sessionStorage.setItem("bookingId", this.basketShortInfo.bookingId)
     },
 
     logOut() {
@@ -73,7 +73,7 @@ export default {
     },
 
     navigateToCheckoutView() {
-      Navigation.navigateToCheckoutView(this.basketShortInfo.bookingId)
+      Navigation.navigateToCheckoutView()
     },
 
   },

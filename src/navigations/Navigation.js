@@ -3,7 +3,7 @@ import router from "@/router";
 export default {
     navigateToErrorView() {
         // todo arendus valmis, kaota kommentaar
-     //   router.push({name: 'errorRoute'})
+        //   router.push({name: 'errorRoute'})
     },
 
     navigateToLoginView() {
@@ -23,12 +23,7 @@ export default {
         })
     },
 
-    navigateToCheckoutView(bookingId) {
-        router.push({
-            name: 'checkoutRoute',
-            query: {
-                bookingId: bookingId
-            }
-        })
+    navigateToCheckoutView() {
+        router.push({name: 'checkoutRoute'})
     },
 }
