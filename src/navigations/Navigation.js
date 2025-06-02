@@ -22,4 +22,13 @@ export default {
             }
         })
     },
+
+    navigateToCheckoutView(bookingId) {
+        router.push({
+            name: 'checkoutRoute',
+            query: {
+                bookingId: bookingId
+            }
+        })
+    },
 }

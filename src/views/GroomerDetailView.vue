@@ -1,45 +1,103 @@
 <template>
-  <div v-if="groomer && groomer.groomerId">
-    <h2>{{ groomer.groomerName }}</h2>
-    <table class="table table-bordered mt-3">
-      <tbody>
-      <tr>
-        <th>Kirjeldus</th>
-        <td>{{ groomer.groomerDescription }}</td>
-      </tr>
-      <tr>
-        <th>Aadress</th>
-        <td>{{ groomer.streetName }} {{ groomer.houseNumber }}</td>
-      </tr>
-      <tr>
-        <th>Kontakttelefon</th>
-        <td>{{ groomer.groomerTelNumber }}</td>
-      </tr>
-      <tr>
-        <th>Email</th>
-        <td>{{ groomer.groomerEmail }}</td>
-      </tr>
-      </tbody>
-    </table>
+  <div>
+
+
+    <div class="container text-center">
+      <div class="row justify-content-center">
+        <div class="col col-8 mb-4">
+
+          <h2>{{ groomer.groomerName }}</h2>
+          <table class="table table-bordered mt-3">
+            <tbody>
+            <tr>
+              <th>Kirjeldus</th>
+              <td>{{ groomer.groomerDescription }}</td>
+            </tr>
+            <tr>
+              <th>Aadress</th>
+              <td>{{ groomer.streetName }} {{ groomer.houseNumber }}</td>
+            </tr>
+            <tr>
+              <th>Kontakttelefon</th>
+              <td>{{ groomer.groomerTelNumber }}</td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td>{{ groomer.groomerEmail }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="col col-6">
+            <table class="table">
+              <thead>
+              <tr>
+                <th scope="col">Pakett</th>
+                <th scope="col">Hind</th>
+                <th scope="col"></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="procedure in groomer.procedures" :key="procedure.groomerProcedureId">
+                <td>{{ procedure.procedureName }}</td>
+                <td>{{ procedure.procedurePrice }}</td>
+                <td>
+                  <font-awesome-icon @click="addBookingRequest(procedure.groomerProcedureId)"
+                                     icon="cart-plus" class="cursor-pointer"/>
+                </td>
+              </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
-  <div v-else>
-    <p>{{ error || 'Laen andmeid...' }}</p>
-  </div>
+
+
 </template>
 
 <script>
 import GroomerService from "@/services/GroomerService";
+import {useRoute} from "vue-router";
+import BookingService from "@/services/BookingService";
 
 export default {
   name: "GroomerDetailView",
   data() {
     return {
-      groomerId: null,
-      groomer: null,
-      error: null
-    };
+      userId: Number(sessionStorage.getItem('userId')),
+      groomerId: 0,
+      error: '',
+
+      groomer: {
+        groomerId: 0,
+        cityId: 0,
+        groomerName: '',
+        groomerDescription: '',
+        groomerTelNumber: '',
+        groomerEmail: '',
+        streetName: '',
+        houseNumber: '',
+        procedures: [
+          {
+            groomerProcedureId: 0,
+            procedureName: '',
+            procedurePrice: 0
+          }
+        ]
+      },
+
+    }
+
   },
   methods: {
+
     getGroomerDetails() {
       console.log('Laen groomeri andmeid ID-ga:', this.groomerId);
       GroomerService.getGroomerDetails(this.groomerId)
@@ -50,11 +108,18 @@ export default {
           .catch(() => {
             this.error = 'Ei leidnud lemmiklooma iluteenindaja andmeid';
           });
-    }
+    },
+
+    addBookingRequest(groomerProcedureId) {
+      BookingService.sendPostBookingGroomerProcedureRequest(this.userId, groomerProcedureId)
+    },
+
+
   },
-  mounted() {
-    this.groomerId = Number(this.$route.query.groomerId);
-    if (this.groomerId) {
+  beforeMount() {
+    let groomerExists = useRoute().query.groomerId !== undefined
+    if (groomerExists) {
+      this.groomerId = Number(useRoute().query.groomerId);
       this.getGroomerDetails();
     } else {
       this.error = 'Vigane või puuduv groomer ID';

@@ -5,12 +5,85 @@
     <div class="btn-group" role="group" aria-label="Nav menu">
       <router-link to="/" class="btn btn-outline-primary">Kodu</router-link>
       <router-link to="/support" class="btn btn-outline-primary">Tugi</router-link>
-      <router-link to="/login" class="btn btn-primary">Logi sisse</router-link>
+
+      <template v-if="!isLoggedIn">
+        <router-link to="/login" class="btn btn-outline-primary">Logi sisse</router-link>
+      </template>
+      <template v-else>
+        <div @click="logOut" class="btn btn-outline-primary">
+          Logi välja
+        </div>
+        <template v-if="basketShortInfo.isBookingStarted">
+          <font-awesome-icon @click="navigateToCheckoutView" icon="basket-shopping" class="cursor-pointer"/>
+          <span>{{basketShortInfo.numberOfItems}}</span>
+        </template>
+      </template>
+
     </div>
   </nav>
 
-  <router-view />
+  <router-view @event-update-nav-menu="updateNavMenu"/>
 </template>
+
+<script>
+import Navigation from "@/navigations/Navigation";
+import RoleService from "@/services/RoleService";
+import BookingService from "@/services/BookingService";
+
+export default {
+  data() {
+    return {
+      userId: 0 ,
+      isLoggedIn: false,
+      modalIsOpen: false,
+      basketShortInfo: {
+        isBookingStarted: false,
+        bookingId: 0,
+        numberOfItems: 0
+      }
+    };
+  },
+  methods: {
+
+
+
+    getBasketShortInfo() {
+      BookingService.sendGetBookingShortBasketInfoRequest(this.userId)
+          .then(response => this.handleGetBasketShortInfoResponse(response))
+          .catch(() => Navigation.navigateToErrorView())
+    },
+
+    handleGetBasketShortInfoResponse(response) {
+      this.basketShortInfo = response.data
+    },
+
+    logOut() {
+      sessionStorage.clear()
+      this.updateNavMenu()
+    },
+
+    updateNavMenu() {
+      this.isLoggedIn = RoleService.isLoggedIn()
+      this.userId = Number(sessionStorage.getItem("userId"))
+      this.getBasketShortInfo()
+    },
+
+    closeModal() {
+      this.modalIsOpen = false
+    },
+
+    navigateToCheckoutView() {
+      Navigation.navigateToCheckoutView(this.basketShortInfo.bookingId)
+    },
+
+  },
+  beforeMount() {
+    this.updateNavMenu()
+  }
+
+}
+</script>
+
 
 <style>
 #app {
@@ -34,5 +107,3 @@ nav a.router-link-exact-active {
   color: #42b983;
 }
 </style>
-<script setup lang="ts">
-</script>
