@@ -26,7 +26,7 @@
 
           <p>Kasutajakontot pole?</p>
 
-          <button @click="goRegisterCustomer" type="button" class="btn btn-outline-primary me-2">
+          <button @click="goRegisterCustomer" type="button" class="btn btn-outline-primary mb-2">
             Registreeri kliendiks
           </button>
 

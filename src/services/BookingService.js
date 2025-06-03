@@ -17,5 +17,13 @@ export default {
                 userId: userId
             }
         });
+    },
+
+    sendGetBookingBasketInfoRequest(bookingId) {
+        return axios.get("/booking/basket-info", {
+            params: {
+                bookingId: bookingId
+            }
+        });
     }
 };
